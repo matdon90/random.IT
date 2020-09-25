@@ -12,7 +12,7 @@
   <h1 align="center">random.IT</h1>
 
   <p align="center">
-    random.IT API
+    random.IT is a system focusing on sharing random or pseudo-random data via API.
     <br />
     <br />
     <a href="https://github.com/matdon90/random.IT/issues">Report Bug</a>
@@ -37,6 +37,7 @@
 ## About The Project
 
 random.IT API 
+
 <!-- USED TECHNOLOGIES -->
 ### Used Technologies
 
