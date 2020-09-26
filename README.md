@@ -43,7 +43,6 @@ random.IT API
 
 Backend
 * [ASP.NET Core 3.1](https://docs.microsoft.com/pl-pl/aspnet/core/?view=aspnetcore-3.1)
-* [Entity Framework Core](https://docs.microsoft.com/en-US/ef/core/)
 
 <!-- GETTING STARTED -->
 ## Getting Started
