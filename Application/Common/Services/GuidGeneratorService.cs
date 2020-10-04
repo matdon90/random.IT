@@ -24,7 +24,7 @@ namespace Application.Common.Services
 
         private const int _versionByteIndex = 7;
         private const int _versionByteMask = 0x0f;
-        private const int _versionByteShift = 4;
+        private const int _versionByteShift = 0x10;
         #endregion
 
         public GuidGeneratorService()
@@ -67,7 +67,7 @@ namespace Application.Common.Services
 
             //setting the version
             guidByteArray[_versionByteIndex] &= (byte)_versionByteMask;
-            guidByteArray[_versionByteIndex] |= (byte)(0x01 << _versionByteShift);
+            guidByteArray[_versionByteIndex] |= (byte)(_versionByteShift);
 
             //setting the variant
             guidByteArray[_variantByteIndex] &= (byte)_variantByteMask;

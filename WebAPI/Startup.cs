@@ -44,6 +44,7 @@ namespace WebAPI
             });
             //
 
+            services.AddRouting(opt => opt.LowercaseUrls = true);
             services.AddControllers();
         }
 
