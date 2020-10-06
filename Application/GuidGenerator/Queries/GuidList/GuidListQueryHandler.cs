@@ -11,16 +11,14 @@ namespace Application.GuidGenerator.Queries.GuidList
     public class GuidListQueryHandler : IRequestHandler<GuidListQuery, List<Guid>>
     {
         private readonly IGuidGenerator _guidGenerator;
-        private readonly IDateTime _dateTime;
 
-        public GuidListQueryHandler(IGuidGenerator guidGenerator, IDateTime dateTime)
+        public GuidListQueryHandler(IGuidGenerator guidGenerator)
         {
             _guidGenerator = guidGenerator;
-            _dateTime = dateTime;
         }
         public Task<List<Guid>> Handle(GuidListQuery request, CancellationToken cancellationToken)
         {
-            return Task.FromResult(_guidGenerator.GuidGenerateMultiple(_dateTime.Now,request.GuidNumbers).ToList());
+            return Task.FromResult(_guidGenerator.GuidGenerateMultiple(request.GuidNumbers).ToList());
         }
     }
 }

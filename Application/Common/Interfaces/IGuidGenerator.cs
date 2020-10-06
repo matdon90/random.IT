@@ -6,6 +6,6 @@ namespace Application.Common.Interfaces
     public interface IGuidGenerator
     {
         Guid GuidGenerateSingle(DateTime date);
-        IEnumerable<Guid> GuidGenerateMultiple(DateTime date, int numberOfGuid);
+        IEnumerable<Guid> GuidGenerateMultiple(int numberOfGuid);
     }
 }
