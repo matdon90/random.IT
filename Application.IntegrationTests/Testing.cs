@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Application.Common.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -35,6 +36,9 @@ namespace Application.IntegrationTests
             services.AddLogging();
 
             startup.ConfigureServices(services);
+
+            services.AddSingleton(provider =>
+                Mock.Of<IUriService>());
 
             _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
         }

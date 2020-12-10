@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using AutoWrapper;
 
 namespace WebAPI
 {
@@ -63,6 +64,15 @@ namespace WebAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "random.IT API");
                 c.RoutePrefix = string.Empty;
             });
+
+
+            //autowrapper
+            app.UseApiResponseAndExceptionWrapper(
+                new AutoWrapperOptions 
+                { 
+                    UseCustomSchema = true,  
+                    ShowStatusCode = true
+                });
 
             app.UseRouting();
             app.UseEndpoints(endpoints =>

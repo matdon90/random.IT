@@ -1,4 +1,5 @@
-﻿using Application.GuidGenerator.Queries.GuidList;
+﻿using Application.Common.Filter;
+using Application.GuidGenerator.Queries.GuidList;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
@@ -15,29 +16,33 @@ namespace Application.IntegrationTests.GuidGenerator.Queries
         public async Task Should_ReturnNotEmptyOrNullList()
         {
             //arrange
-            var query = new GuidListQuery(10);
+            var filter = new PaginationFilter();
+            var path = String.Empty;
+            var query = new GuidListQuery(10, filter, path);
 
             //act
             var result = await SendAsync(query);
 
             //assert
-            result.Should().NotBeNullOrEmpty();
+            result.Result.As<List<Guid>>().Should().NotBeNullOrEmpty();
         }
 
         [Test]
         public async Task Should_ReturnListOfTenGuids()
         {
             //arrange
-            var query = new GuidListQuery(10);
+            var filter = new PaginationFilter();
+            var path = String.Empty;
+            var query = new GuidListQuery(10, filter, path);
 
             //act
             var result = await SendAsync(query);
 
             //assert
-            result.Should().HaveCount(10);
+            result.Result.As<List<Guid>>().Should().HaveCount(10 > filter.PageSize ? filter.PageSize : 10);
             for (int i = 0; i < 10; i++)
             {
-                result[i].Should<Guid>().BeOfType<Guid>();
+                result.Result.As<List<Guid>>()[i].Should<Guid>().BeOfType<Guid>();
             }
         }
 
@@ -45,16 +50,23 @@ namespace Application.IntegrationTests.GuidGenerator.Queries
         public async Task Should_ReturnListWithNoRepeats()
         {
             //arrange
-            int guidNumber = 100000;
-            var query = new GuidListQuery(guidNumber);
+            var filter = new PaginationFilter();
+            var path = String.Empty;
+            int guidNumber = 10000;
 
-
+            var allResults = new List<Guid>();
             //act
-            var result = await SendAsync(query);
+            for (int i = 0; i < (guidNumber / filter.PageSize); i++)
+            {
+                var result = await SendAsync(new GuidListQuery(guidNumber, new PaginationFilter(i + 1, 10), path));
+                allResults.AddRange(result.Result.As<List<Guid>>());
 
-            //assert
-            result.Should().HaveCount(guidNumber);
-            result.Should().OnlyHaveUniqueItems();
+                //assert
+                result.Result.As<List<Guid>>().Should().HaveCount(guidNumber > filter.PageSize ? filter.PageSize : guidNumber);
+                result.Result.As<List<Guid>>().Should().OnlyHaveUniqueItems();
+            }
+
+            allResults.Should().OnlyHaveUniqueItems();
         }
     }
 }
