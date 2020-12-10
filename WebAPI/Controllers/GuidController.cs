@@ -4,7 +4,6 @@ using Application.GuidGenerator.Queries.GuidList;
 using Application.GuidGenerator.Queries.GuidSingle;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
@@ -16,9 +15,9 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<Guid>> SingleGuid()
+        public async Task<ActionResult<string>> SingleGuid([FromQuery] bool? isUppercase = null)
         {
-            return await Mediator.Send(new GuidSingleQuery());
+            return await Mediator.Send(new GuidSingleQuery(isUppercase.GetValueOrDefault()));
         }
 
         /// <summary>
@@ -26,11 +25,12 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <param name="guidNumbers"></param>
         /// <param name="filter"></param>
+        /// <param name="isUppercase"></param>
         /// <returns></returns>
         [HttpGet("{guidNumbers}")]
-        public async Task<ActionResult<ApiResponseWrapper>> ListGuid(int guidNumbers, [FromQuery] PaginationFilter filter)
+        public async Task<ActionResult<ApiResponseWrapper>> ListGuid(int guidNumbers, [FromQuery] PaginationFilter filter, [FromQuery] bool? isUppercase = null)
         {
-            return await Mediator.Send(new GuidListQuery(guidNumbers, filter, Request.Path.Value));
+            return await Mediator.Send(new GuidListQuery(guidNumbers, isUppercase.GetValueOrDefault(), filter, Request.Path.Value));
         }
     }
 }
