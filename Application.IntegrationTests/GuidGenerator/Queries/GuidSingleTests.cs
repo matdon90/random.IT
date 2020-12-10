@@ -15,7 +15,7 @@ namespace Application.IntegrationTests.GuidGenerator.Queries
         public async Task Should_ReturnNotNull()
         {
             //arrange
-            var query = new GuidSingleQuery();
+            var query = new GuidSingleQuery(false);
 
             //act
             var result = await SendAsync(query);
@@ -28,21 +28,21 @@ namespace Application.IntegrationTests.GuidGenerator.Queries
         public async Task Should_ReturnGuidType()
         {
             //arrange
-            var query = new GuidSingleQuery();
+            var query = new GuidSingleQuery(false);
 
             //act
             var result = await SendAsync(query);
 
             //assert
-            result.Should<Guid>().BeOfType<Guid>();
+            result.Should<string>().BeOfType<string>();
         }
 
         [Test]
         public async Task Should_ReturnNoRepeats()
         {
             //arrange
-            var guidList = new List<Guid>();
-            var query = new GuidSingleQuery();
+            var guidList = new List<string>();
+            var query = new GuidSingleQuery(false);
             int guidNumber = 100000;
 
             //act

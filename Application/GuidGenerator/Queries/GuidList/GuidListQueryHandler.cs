@@ -29,6 +29,7 @@ namespace Application.GuidGenerator.Queries.GuidList
                 .GuidGenerateMultiple(request.GuidNumbers)
                 .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                 .Take(validFilter.PageSize)
+                .Select(g => request.IsUppercase ? g.ToString().ToUpper() : g.ToString())
                 .ToList();
             var totalRecords = request.GuidNumbers;
 
