@@ -47,6 +47,46 @@ namespace Application.IntegrationTests.GuidGenerator.Queries
         }
 
         [Test]
+        public async Task Should_ReturnListOfTenGuidsLowercase()
+        {
+            //arrange
+            var filter = new PaginationFilter();
+            var path = String.Empty;
+            var query = new GuidListQuery(10, false, filter, path);
+
+            //act
+            var result = await SendAsync(query);
+
+            //assert
+            result.Result.As<List<string>>().Should().HaveCount(10 > filter.PageSize ? filter.PageSize : 10);
+            for (int i = 0; i < 10; i++)
+            {
+                result.Result.As<List<string>>()[i].Should<string>().BeOfType<string>();
+                result.Result.As<List<string>>()[i].Should().Be(result.Result.As<List<string>>()[i].ToLower());
+            }
+        }
+
+        [Test]
+        public async Task Should_ReturnListOfTenGuidsUppercase()
+        {
+            //arrange
+            var filter = new PaginationFilter();
+            var path = String.Empty;
+            var query = new GuidListQuery(10, true, filter, path);
+
+            //act
+            var result = await SendAsync(query);
+
+            //assert
+            result.Result.As<List<string>>().Should().HaveCount(10 > filter.PageSize ? filter.PageSize : 10);
+            for (int i = 0; i < 10; i++)
+            {
+                result.Result.As<List<string>>()[i].Should<string>().BeOfType<string>();
+                result.Result.As<List<string>>()[i].Should().Be(result.Result.As<List<string>>()[i].ToUpper());
+            }
+        }
+
+        [Test]
         public async Task Should_ReturnListWithNoRepeats()
         {
             //arrange
