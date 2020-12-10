@@ -1,4 +1,6 @@
-﻿using Application.GuidGenerator.Queries.GuidList;
+﻿using Application.Common.Filter;
+using Application.Common.Wrappers;
+using Application.GuidGenerator.Queries.GuidList;
 using Application.GuidGenerator.Queries.GuidSingle;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -23,11 +25,12 @@ namespace WebAPI.Controllers
         /// Return list with number of GUIDs declared in parameter. GUIDs generated based on current timedate.
         /// </summary>
         /// <param name="guidNumbers"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
         [HttpGet("{guidNumbers}")]
-        public async Task<ActionResult<List<Guid>>> ListGuid(int guidNumbers)
+        public async Task<ActionResult<ApiResponseWrapper>> ListGuid(int guidNumbers, [FromQuery] PaginationFilter filter)
         {
-            return await Mediator.Send(new GuidListQuery() { GuidNumbers = guidNumbers });
+            return await Mediator.Send(new GuidListQuery(guidNumbers, filter, Request.Path.Value));
         }
     }
 }
