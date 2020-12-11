@@ -1,4 +1,4 @@
-﻿[![Contributors][contributors-shield]][contributors-url]
+[![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -27,7 +27,7 @@
 * [About the Project](#about-the-project)
 * [Used Technologies](#used-technologies)
 * [Getting Started](#getting-started)
-* [Usage](#usage)
+* [Api Documentation](#api-documentation)
 * [Contributing](#contributing)
 * [Contact](#contact)
 
@@ -36,23 +36,143 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-random.IT API 
+random.IT is system focused on sharing random or pseudo-random data via API. The application is plan to consist of parts that generate independent data. First, it will be a GUID number generator, and then random IP protocol configurations compliant with the requirements specified in the query. The next parts, and also the next generators, will be added according to the needs or suggestions of users.
+
 
 <!-- USED TECHNOLOGIES -->
 ### Used Technologies
 
 Backend
 * [ASP.NET Core 3.1](https://docs.microsoft.com/pl-pl/aspnet/core/?view=aspnetcore-3.1)
+* [MediatR](https://github.com/jbogard/MediatR)
+* [AutoMapper](https://automapper.org/)
+* [AutoWrapper](https://github.com/proudmonkey/AutoWrapper)
+* [Swashbuckle](https://docs.microsoft.com/en-US/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-5.0&tabs=visual-studio)
+* [NUnit](https://nunit.org/)
+* [Moq](https://github.com/Moq/moq4/wiki/Quickstart)
+* [FluentAssertion](https://fluentassertions.com/)
+
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This section will soon contain steps how to get a local and running copy...
+To get a local copy up and running follow these simple steps:
 
-<!-- USAGE EXAMPLES -->
-## Usage
+* Download the latest stable version from the download tab and unzip it to your folder
+* Open the solution in Visual Studio 2019. 
+* Clean solution.
+* Build the solution to install Nuget packages.
+* Run application
+* Fire up your browser and open url `https://localhost:44386/` to use a Swagger UI
+* Enjoy ;-)
 
-This section will soon contain screens of application's parts with functionalities...
+<!-- API DOCUMENTATION -->
+## API Documentation
+
+The API currently contains 1 endpoint: Guid.
+When new endpoints are created, they will be successively added to the documentation.
+
+### GUID
+
+| Command    | Method | Route                   | Description                                             |
+|------------|--------|-------------------------|---------------------------------------------------------|
+| SingleGuid | GET    | /api/guid               | Return single GUID generated based on current timedate  |
+
+API command SingleGuid allows user to retrieve single version 1 GUID.
+User can parametrize request:
+* isUppercase (optional) - will return GUID in uppercase, i.e. `/api/guid?isuppercase=true`
+
+Response data will be in the following format:
+```
+{
+  "statusCode": <int>,
+  "message": <string>",
+  "result": <string>
+}
+```
+
+Example response for `/api/guid?isuppercase=true`:
+```json
+{
+  "statusCode": 200,
+  "message": "GET Request successful.",
+  "result": "2E0ACB1C-3B88-11EB-9410-3F26C08F1611"
+}
+```
+
+
+| Command    | Method | Route                   | Description                                             |
+|------------|--------|-------------------------|---------------------------------------------------------|
+| ListGuid   | GET    | /api/guid/{guidNumbers} | Returns list with number of GUIDs declared in {guidNumbers} parameter |
+
+API command ListGuid allows user to retrieve list of version 4 GUIDs. Res
+Response is paginated:
+* its default page size is 10 and cannot be higher than 30
+* default page number is 1 and cannot be lower than 1
+These can be changed in request.
+
+User can parametrize request:
+* PageNumber (default: 1) - will returns chosen page number, i.e. `/api/guid/50?PageNumber=2`
+* PageSize (default: 10) - will set size of page of response, i.e. `/api/guid/50?PageSize=4`
+* isUppercase (optional) - will return list of GUIDs in uppercase, i.e. `/api/guid/8?isuppercase=true`
+
+Response data will be in the following format:
+```
+{
+  "statusCode": <int>,
+  "message": <string>,
+  "result": [
+    <string>
+    ...
+    <string>
+  ],
+  "pagination": {
+    "pageNumber": <int>,
+    "pageSize": <int>,
+    "totalPages": <int>,
+    "totalRecords": <int>,
+    "firstPage": <string>,
+    "lastPage": <string>,
+    "nextPage": <string>,
+    "previousPage": <string>
+  }
+}
+```
+
+Example response for `/api/guid/120?PageNumber=3&PageSize=15&isUppercase=true`:
+```json
+{
+  "statusCode": 200,
+  "message": "GET Request successful.",
+  "result": [
+    "2BC7C2B0-D254-4272-9166-8369DB9421E5",
+    "959754B4-4E69-429C-9166-C7A0E260B8DB",
+    "A0F64567-EFCD-450B-9166-576B0FDE3692",
+    "F7F0CA44-D458-4497-9166-D01771D590AE",
+    "F44826FB-961A-4E6B-9166-733AC731D9EF",
+    "8B862CFD-0918-4CBD-9166-B0EA08E34423",
+    "F72FDE75-5C5F-40C9-9166-221BC39F2706",
+    "2630B557-A7FA-4447-9166-90E5BD87F0FE",
+    "36EB5E76-4752-44C8-9166-0BCFD27D26CD",
+    "78C86B09-B6E1-4AA5-9166-BAE2E99CDBD1",
+    "D73A4A4D-CA6C-44B9-9166-2F8C4DDF3EC3",
+    "7D5361AA-7A81-459A-9166-1C44A53A587C",
+    "B64D09A4-F76C-4046-9166-94FA115B1344",
+    "012B3B3B-E278-494F-9166-8E6C1A613628",
+    "3232F62D-3C71-4620-9166-3F9673467CE9"
+  ],
+  "pagination": {
+    "pageNumber": 3,
+    "pageSize": 15,
+    "totalPages": 8,
+    "totalRecords": 120,
+    "firstPage": "https://localhost:44386/api/guid/120?pageNumber=1&pageSize=15",
+    "lastPage": "https://localhost:44386/api/guid/120?pageNumber=8&pageSize=15",
+    "nextPage": "https://localhost:44386/api/guid/120?pageNumber=4&pageSize=15",
+    "previousPage": "https://localhost:44386/api/guid/120?pageNumber=2&pageSize=15"
+  }
+}
+```
 
 <!-- CONTRIBUTING -->
 ## Contributing
