@@ -105,7 +105,7 @@ Example response for `/api/guid?isuppercase=true`:
 |------------|--------|-------------------------|---------------------------------------------------------|
 | ListGuid   | GET    | /api/guid/{guidNumbers} | Returns list with number of GUIDs declared in {guidNumbers} parameter |
 
-API command ListGuid allows user to retrieve list of version 4 GUIDs. Res
+API command ListGuid allows user to retrieve list of version 4 GUIDs.
 Response is paginated:
 * its default page size is 10 and cannot be higher than 30
 * default page number is 1 and cannot be lower than 1
