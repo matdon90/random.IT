@@ -2,8 +2,10 @@
 {
     public class NetworkConfig
     {
-        public string ipV4Address { get; set; }
+        public string ipHostAddress { get; set; }
         public string subnetMask { get; set; }
-        public string defaultGateway { get; set; }
+        public string subnetAddress { get; set; }
+        public string subnetBroadcastAddress { get; set; }
+        public int freeHostsNumberInSubnet { get; set; }
     }
 }
