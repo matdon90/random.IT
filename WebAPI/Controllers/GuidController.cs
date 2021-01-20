@@ -23,14 +23,14 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Return list with number of GUIDs declared in parameter. GUIDs generated based on current timedate.
         /// </summary>
-        /// <param name="guidNumbers"></param>
+        /// <param name="guidsNumber"></param>
         /// <param name="filter"></param>
         /// <param name="isUppercase"></param>
         /// <returns></returns>
-        [HttpGet("{guidNumbers}")]
-        public async Task<ActionResult<ApiResponseWrapper>> ListGuid(int guidNumbers, [FromQuery] PaginationFilter filter, [FromQuery] bool? isUppercase = null)
+        [HttpGet("{guidsNumber}")]
+        public async Task<ActionResult<ApiResponseWrapper>> ListGuid(int guidsNumber, [FromQuery] PaginationFilter filter, [FromQuery] bool? isUppercase = null)
         {
-            return await Mediator.Send(new GuidListQuery(guidNumbers, isUppercase.GetValueOrDefault(), filter, Request.Path.Value));
+            return await Mediator.Send(new GuidListQuery(guidsNumber, isUppercase.GetValueOrDefault(), filter, Request.Path.Value));
         }
     }
 }

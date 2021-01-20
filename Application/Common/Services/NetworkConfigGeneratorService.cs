@@ -2,6 +2,7 @@
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Common.Services
 {
@@ -118,6 +119,17 @@ namespace Application.Common.Services
             return ipAddress;
         }
 
+        private string GetNextIpAddress(string ipBaseTemplate)
+        {
+            var ipOctetTable = new string[4];
+            string ipAddress = string.Empty;
+
+            var ipOctetIntTable = ipBaseTemplate.Split('.').Select(o => int.Parse(o)).ToArray();
+            ipOctetIntTable[3]++;
+            ipOctetTable = ipOctetIntTable.Select(o => o.ToString()).ToArray();
+            return $"{ipOctetTable[0]}.{ipOctetTable[1]}.{ipOctetTable[2]}.{ipOctetTable[3]}";
+        }
+
         /// <summary>
         /// Get subnet address based on IP address and subnet mask.
         /// </summary>
@@ -126,22 +138,77 @@ namespace Application.Common.Services
         /// <returns></returns>
         private string GetSubnetAddress(string ipAddress, string subnetMask)
         {
-            return string.Empty;
+            var subnetAddressOctetTable = new int[4];
+            var ipAddressOctetTable = ipAddress.Split(".").Select(o => int.Parse(o)).ToArray();
+            var subnetMaskOctetTable = subnetMask.Split(".").Select(o => int.Parse(o)).ToArray();
+            for (int i = 0; i < subnetAddressOctetTable.Length; i++)
+            {
+                subnetAddressOctetTable[i] = ipAddressOctetTable[i] & subnetMaskOctetTable[i];
+            }
+            return $"{subnetAddressOctetTable[0]}.{subnetAddressOctetTable[1]}.{subnetAddressOctetTable[2]}.{subnetAddressOctetTable[3]}";
         }
 
         /// <summary>
         /// Get subnet broadcast address based on subnet mask and subnet address.
         /// </summary>
         /// <param name="subnetMask"></param>
+        /// <param name="subnetAddress"></param>
         /// <returns></returns>
         private string GetSubnetBroadcastAddress(string subnetMask, string subnetAddress)
         {
-            return string.Empty;
+            var subnetBroadcastAddressOctetTable = new int[4];
+            var subnetAddressOctetTable = subnetAddress.Split(".").Select(o => int.Parse(o)).ToArray();
+            var negateSubnetMaskOctetTable = subnetMask.Split(".").Select(o => ~int.Parse(o)).ToArray();
+            for (int i = 0; i < subnetBroadcastAddressOctetTable.Length; i++)
+            {
+                subnetBroadcastAddressOctetTable[i] = subnetAddressOctetTable[i] + negateSubnetMaskOctetTable[i];
+            }
+            return $"{subnetBroadcastAddressOctetTable[0]}.{subnetBroadcastAddressOctetTable[1]}.{subnetBroadcastAddressOctetTable[2]}.{subnetBroadcastAddressOctetTable[3]}";
+
         }
 
         public IEnumerable<NetworkConfig> GenerateNetworkConfigs(int numberOfConfigs)
         {
-            throw new System.NotImplementedException();
+            var networkConfigList = new List<NetworkConfig>();
+
+            var subnetMask = GetSubnetMask(numberOfConfigs);
+
+            for (int i = 0; i < numberOfConfigs; i++)
+            {
+                if (i==0)
+                {
+                    var ipAddress = GetIpAddress(null);
+                    var subnetAddress = GetSubnetAddress(ipAddress, subnetMask);
+                    var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+
+                    var config = new NetworkConfig()
+                    {
+                        ipHostAddress = ipAddress,
+                        subnetMask = subnetMask,
+                        subnetAddress = subnetAddress,
+                        subnetBroadcastAddress = subnetBroadcastAddress
+                    };
+
+                    networkConfigList.Add(config);
+                }
+                else
+                {
+                    var ipAddress = GetNextIpAddress(networkConfigList.Last().ipHostAddress);
+                    var subnetAddress = GetSubnetAddress(ipAddress, subnetMask);
+                    var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+
+                    var config = new NetworkConfig()
+                    {
+                        ipHostAddress = ipAddress,
+                        subnetMask = subnetMask,
+                        subnetAddress = subnetAddress,
+                        subnetBroadcastAddress = subnetBroadcastAddress
+                    };
+
+                    networkConfigList.Add(config);
+                }
+            }
+            return networkConfigList;
         }
 
         public IEnumerable<NetworkConfig> GenerateNetworkConfigsByIpTemplate(int numberOfConfigs, string ipTemplate)

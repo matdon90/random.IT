@@ -25,7 +25,7 @@ namespace Application
 
             services.AddTransient<IDateTime, DateTimeService>();
             services.AddTransient<IGuidGenerator, GuidGeneratorService>();
-
+            services.AddTransient<INetworkConfigGenerator, NetworkConfigGeneratorService>();
             return services;
         }
     }
