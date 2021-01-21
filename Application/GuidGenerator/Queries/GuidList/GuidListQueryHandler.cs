@@ -26,12 +26,12 @@ namespace Application.GuidGenerator.Queries.GuidList
             var route = request.Path;
             var validFilter = new PaginationFilter(request.Filter.PageNumber, request.Filter.PageSize);
             var pagedData = _guidGenerator
-                .GuidGenerateMultiple(request.GuidNumbers)
+                .GuidGenerateMultiple(request.GuidsNumber)
                 .Skip((validFilter.PageNumber - 1) * validFilter.PageSize)
                 .Take(validFilter.PageSize)
                 .Select(g => request.IsUppercase ? g.ToString().ToUpper() : g.ToString())
                 .ToList();
-            var totalRecords = request.GuidNumbers;
+            var totalRecords = request.GuidsNumber;
 
             var response = PaginationHelper.CreateResponse(pagedData, validFilter, totalRecords, _uriService, route);
             return Task.FromResult(response);
