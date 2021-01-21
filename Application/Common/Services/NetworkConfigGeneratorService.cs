@@ -120,11 +120,11 @@ namespace Application.Common.Services
 
 
         /// <summary>
-        /// Gets ip based on provided IP address template.
+        /// Gets base IP address based on provided IP address template.
         /// </summary>
         /// <param name="ipTemplate"></param>
         /// <returns></returns>
-        private string GetIpAddress(string ipTemplate)
+        private string GetBaseIpAddress(string ipTemplate)
         {
             var ipOctetTable = new string[4];
             string ipAddress = string.Empty;
@@ -156,6 +156,11 @@ namespace Application.Common.Services
             return ipAddress;
         }
 
+        /// <summary>
+        /// Calculating next IP address based on provided IP.
+        /// </summary>
+        /// <param name="ipBaseTemplate"></param>
+        /// <returns></returns>
         private string GetNextIpAddress(string ipBaseTemplate)
         {
             var ipOctetTable = new string[4];
@@ -204,10 +209,15 @@ namespace Application.Common.Services
 
         }
 
+        /// <summary>
+        /// Generates random network configs in the number defined in parameters.
+        /// </summary>
+        /// <param name="numberOfConfigs"></param>
+        /// <returns></returns>
         public IEnumerable<NetworkConfig> GenerateNetworkConfigs(int numberOfConfigs)
         {
             var networkConfigList = new List<NetworkConfig>();
-            var ipAddressBase = GetIpAddress(null);
+            var ipAddressBase = GetBaseIpAddress(null);
             var subnetMask = GetSubnetMask(numberOfConfigs);
             var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
             var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
@@ -231,9 +241,37 @@ namespace Application.Common.Services
             return networkConfigList;
         }
 
+        /// <summary>
+        /// Generates random network configs with IP of based template and in the number defined in parameters.
+        /// </summary>
+        /// <param name="numberOfConfigs"></param>
+        /// <param name="ipTemplate"></param>
+        /// <returns></returns>
         public IEnumerable<NetworkConfig> GenerateNetworkConfigsByIpTemplate(int numberOfConfigs, string ipTemplate)
         {
-            throw new System.NotImplementedException();
+            var networkConfigList = new List<NetworkConfig>();
+            var ipAddressBase = GetBaseIpAddress(ipTemplate);
+            var subnetMask = GetSubnetMask(numberOfConfigs);
+            var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
+            var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs);
+
+            for (int i = 0; i < numberOfConfigs; i++)
+            {
+                var ipBaseTemplate = i == 0 ? subnetAddress : networkConfigList.Last().ipHostAddress;
+                var ipAddress = GetNextIpAddress(ipBaseTemplate);
+                var config = new NetworkConfig()
+                {
+                    ipHostAddress = ipAddress,
+                    subnetMask = subnetMask,
+                    subnetAddress = subnetAddress,
+                    subnetBroadcastAddress = subnetBroadcastAddress,
+                    freeHostsNumberInSubnet = freeHostsNumber
+                };
+
+                networkConfigList.Add(config);
+            }
+            return networkConfigList;
         }
 
         public IEnumerable<NetworkConfig> GenerateNetworkConfigsByMask(int numberOfConfigs, string subnetMask)
