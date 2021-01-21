@@ -55,32 +55,69 @@ namespace Application.Common.Services
         {
             return numberOfHosts switch
             {
-                var x when x > 8388608 => "255.0.0.0",
-                var x when x > 4194304 & x <= 8388608 => "255.128.0.0",
-                var x when x > 2097152 & x <= 4194304 => "255.192.0.0",
-                var x when x > 1048576 & x <= 2097152 => "255.224.0.0",
-                var x when x > 524288 & x <= 1048576 => "255.240.0.0",
-                var x when x > 262144 & x <= 524288 => "255.248.0.0",
-                var x when x > 131072 & x <= 262144 => "255.252.0.0",
-                var x when x > 65536 & x <= 131072 => "255.254.0.0",
-                var x when x > 32768 & x <= 65536 => "255.255.0.0",
-                var x when x > 16384 & x <= 32768 => "255.255.128.0",
-                var x when x > 8192 & x <= 16384 => "255.255.192.0",
-                var x when x > 4096 & x <= 8192 => "255.255.224.0",
-                var x when x > 2048 & x <= 4096 => "255.255.240.0",
-                var x when x > 1024 & x <= 2048 => "255.255.248.0",
-                var x when x > 512 & x <= 1024 => "255.255.252.0",
-                var x when x > 256 & x <= 512 => "255.255.254.0",
-                var x when x > 128 & x <= 256 => "255.255.255.0",
-                var x when x > 64 & x <= 128 => "255.255.255.128",
-                var x when x > 32 & x <= 64 => "255.255.255.192",
-                var x when x > 16 & x <= 32 => "255.255.255.224",
-                var x when x > 8 & x <= 16 => "255.255.255.240",
-                var x when x > 4 & x <= 8 => "255.255.255.248",
-                var x when x >= 1 & x <= 4 => "255.255.255.252",
+                var x when x > 8388606 => "255.0.0.0",
+                var x when x > 4194302 & x <= 8388606 => "255.128.0.0",
+                var x when x > 2097150 & x <= 4194302 => "255.192.0.0",
+                var x when x > 1048574 & x <= 2097150 => "255.224.0.0",
+                var x when x > 524286 & x <= 1048574 => "255.240.0.0",
+                var x when x > 262142 & x <= 524286 => "255.248.0.0",
+                var x when x > 131070 & x <= 262142 => "255.252.0.0",
+                var x when x > 65534 & x <= 131070 => "255.254.0.0",
+                var x when x > 32766 & x <= 65534 => "255.255.0.0",
+                var x when x > 16382 & x <= 32766 => "255.255.128.0",
+                var x when x > 8190 & x <= 16382 => "255.255.192.0",
+                var x when x > 4094 & x <= 8190 => "255.255.224.0",
+                var x when x > 2046 & x <= 4094 => "255.255.240.0",
+                var x when x > 1022 & x <= 2046 => "255.255.248.0",
+                var x when x > 510 & x <= 1022 => "255.255.252.0",
+                var x when x > 256 & x <= 510 => "255.255.254.0",
+                var x when x > 126 & x <= 254 => "255.255.255.0",
+                var x when x > 62 & x <= 126 => "255.255.255.128",
+                var x when x > 30 & x <= 62 => "255.255.255.192",
+                var x when x > 14 & x <= 30 => "255.255.255.224",
+                var x when x > 6 & x <= 14 => "255.255.255.240",
+                var x when x > 2 & x <= 6 => "255.255.255.248",
+                var x when x >= 1 & x <= 2 => "255.255.255.252",
                 _ => "0.0.0.0"
             };
         }
+
+        /// <summary>
+        /// Get number of available hosts in calculated subnet.
+        /// </summary>
+        /// <param name="numberOfHosts"></param>
+        /// <returns></returns>
+        private int GetFreeHostsNumber(int numberOfHosts)
+        {
+            return numberOfHosts switch
+            {
+                var x when x > 8388606 => 16777214 - numberOfHosts,
+                var x when x > 4194302 & x <= 8388606 => 16777214 - numberOfHosts,
+                var x when x > 2097150 & x <= 4194302 => 4194302 - numberOfHosts,
+                var x when x > 1048574 & x <= 2097150 => 2097150 - numberOfHosts,
+                var x when x > 524286 & x <= 1048574 => 1048574 - numberOfHosts,
+                var x when x > 262142 & x <= 524286 => 524286 - numberOfHosts,
+                var x when x > 131070 & x <= 262142 => 262142 - numberOfHosts,
+                var x when x > 65534 & x <= 131070 => 131070 - numberOfHosts,
+                var x when x > 32766 & x <= 65534 => 6534 - numberOfHosts,
+                var x when x > 16382 & x <= 32766 => 32766 - numberOfHosts,
+                var x when x > 8190 & x <= 16382 => 16382 - numberOfHosts,
+                var x when x > 4094 & x <= 8190 => 8190 - numberOfHosts,
+                var x when x > 2046 & x <= 4094 => 4094 - numberOfHosts,
+                var x when x > 1022 & x <= 2046 => 2046 - numberOfHosts,
+                var x when x > 510 & x <= 1022 => 1022 - numberOfHosts,
+                var x when x > 256 & x <= 510 => 510 - numberOfHosts,
+                var x when x > 126 & x <= 254 => 254 - numberOfHosts,
+                var x when x > 62 & x <= 126 => 126 - numberOfHosts,
+                var x when x > 30 & x <= 62 => 62 - numberOfHosts,
+                var x when x > 14 & x <= 30 => 30 - numberOfHosts,
+                var x when x > 6 & x <= 14 => 14 - numberOfHosts,
+                var x when x > 2 & x <= 6 => 6 - numberOfHosts,
+                var x when x >= 1 & x <= 2 => 2 - numberOfHosts,
+                _ => 0
+            };
+        }
+
 
         /// <summary>
         /// Gets ip based on provided IP address template.
@@ -158,7 +195,7 @@ namespace Application.Common.Services
         {
             var subnetBroadcastAddressOctetTable = new int[4];
             var subnetAddressOctetTable = subnetAddress.Split(".").Select(o => int.Parse(o)).ToArray();
-            var negateSubnetMaskOctetTable = subnetMask.Split(".").Select(o => ~int.Parse(o)).ToArray();
+            var negateSubnetMaskOctetTable = subnetMask.Split(".").Select(o => (~int.Parse(o) & 0xf)).ToArray();
             for (int i = 0; i < subnetBroadcastAddressOctetTable.Length; i++)
             {
                 subnetBroadcastAddressOctetTable[i] = subnetAddressOctetTable[i] + negateSubnetMaskOctetTable[i];
@@ -170,43 +207,26 @@ namespace Application.Common.Services
         public IEnumerable<NetworkConfig> GenerateNetworkConfigs(int numberOfConfigs)
         {
             var networkConfigList = new List<NetworkConfig>();
-
+            var ipAddressBase = GetIpAddress(null);
             var subnetMask = GetSubnetMask(numberOfConfigs);
+            var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
+            var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs);
 
             for (int i = 0; i < numberOfConfigs; i++)
             {
-                if (i==0)
+                var ipBaseTemplate = i == 0 ? subnetAddress : networkConfigList.Last().ipHostAddress;
+                var ipAddress = GetNextIpAddress(ipBaseTemplate);
+                var config = new NetworkConfig()
                 {
-                    var ipAddress = GetIpAddress(null);
-                    var subnetAddress = GetSubnetAddress(ipAddress, subnetMask);
-                    var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+                    ipHostAddress = ipAddress,
+                    subnetMask = subnetMask,
+                    subnetAddress = subnetAddress,
+                    subnetBroadcastAddress = subnetBroadcastAddress,
+                    freeHostsNumberInSubnet = freeHostsNumber
+                };
 
-                    var config = new NetworkConfig()
-                    {
-                        ipHostAddress = ipAddress,
-                        subnetMask = subnetMask,
-                        subnetAddress = subnetAddress,
-                        subnetBroadcastAddress = subnetBroadcastAddress
-                    };
-
-                    networkConfigList.Add(config);
-                }
-                else
-                {
-                    var ipAddress = GetNextIpAddress(networkConfigList.Last().ipHostAddress);
-                    var subnetAddress = GetSubnetAddress(ipAddress, subnetMask);
-                    var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
-
-                    var config = new NetworkConfig()
-                    {
-                        ipHostAddress = ipAddress,
-                        subnetMask = subnetMask,
-                        subnetAddress = subnetAddress,
-                        subnetBroadcastAddress = subnetBroadcastAddress
-                    };
-
-                    networkConfigList.Add(config);
-                }
+                networkConfigList.Add(config);
             }
             return networkConfigList;
         }
