@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Returns single GUID generated based on current timedate.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Single GUID</returns>
         [HttpGet]
         public async Task<ActionResult<string>> SingleGuid([FromQuery] bool? isUppercase = null)
         {
@@ -23,10 +23,10 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Return list with number of GUIDs declared in parameter. GUIDs generated based on current timedate.
         /// </summary>
-        /// <param name="guidsNumber"></param>
-        /// <param name="filter"></param>
-        /// <param name="isUppercase"></param>
-        /// <returns></returns>
+        /// <param name="guidsNumber">Number of GUIDs</param>
+        /// <param name="filter">Pagination filter</param>
+        /// <param name="isUppercase">Is GUID in uppercase</param>
+        /// <returns>List of GUIDs</returns>
         [HttpGet("{guidsNumber}")]
         public async Task<ActionResult<ApiResponseWrapper>> ListGuid(int guidsNumber, [FromQuery] PaginationFilter filter, [FromQuery] bool? isUppercase = null)
         {

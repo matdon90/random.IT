@@ -2,19 +2,21 @@
 using Application.Common.Wrappers;
 using MediatR;
 
-namespace Application.NetworkConfigsGenerator.Queries.NetworkConfigListWithIpTemplate
+namespace Application.NetworkConfigsGenerator.Queries.NetworkConfigBasedOnTemplatesList
 {
-    public class NetworkConfigWithIpTemplateListQuery : IRequest<ApiResponseWrapper>
+    public class NetworkConfigBasedOnTemplatesListQuery : IRequest<ApiResponseWrapper>
     {
         public int NetworkConfigsNumber { get; set; }
         public string IpTemplate { get; set; }
+        public string SubnetMask { get; set; }
         public PaginationFilter Filter { get; set; }
         public string Path { get; set; }
 
-        public NetworkConfigWithIpTemplateListQuery(int numberOfNetowrkConfigs, string ipTemplate, PaginationFilter filter, string path)
+        public NetworkConfigBasedOnTemplatesListQuery(int numberOfNetowrkConfigs, string ipTemplate, string subnetMask, PaginationFilter filter, string path)
         {
             NetworkConfigsNumber = numberOfNetowrkConfigs;
             IpTemplate = ipTemplate;
+            SubnetMask = subnetMask;
             Filter = filter;
             Path = path;
         }

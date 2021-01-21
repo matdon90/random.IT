@@ -24,7 +24,7 @@ namespace Application.Common.Services
         /// <summary>
         /// Checks if string is a number.
         /// </summary>
-        /// <param name="inputToCheck"></param>
+        /// <param name="inputToCheck">Input to check</param>
         /// <returns></returns>
         private bool IsNumeric(string stringToCheck)
         {
@@ -37,9 +37,9 @@ namespace Application.Common.Services
         /// <summary>
         /// Checks if number is within a provided range.
         /// </summary>
-        /// <param name="numberToCheck"></param>
-        /// <param name="minValue"></param>
-        /// <param name="maxValue"></param>
+        /// <param name="numberToCheck">Number to check</param>
+        /// <param name="minValue">Minimal value</param>
+        /// <param name="maxValue">Maximal value</param>
         /// <returns></returns>
         bool IsInRange(int numberToCheck, int minValue, int maxValue)
         {
@@ -49,7 +49,7 @@ namespace Application.Common.Services
         /// <summary>
         /// Gets most optimal subnet mask based on number of hosts needed.
         /// </summary>
-        /// <param name="numberOfHosts"></param>
+        /// <param name="numberOfHosts">Number of hosts</param>
         /// <returns></returns>
         private string GetSubnetMask(int numberOfHosts)
         {
@@ -83,38 +83,39 @@ namespace Application.Common.Services
         }
 
         /// <summary>
-        /// Get number of available hosts in calculated subnet.
+        /// Get number of available hosts in subnet based on number of hosts needed.
         /// </summary>
-        /// <param name="numberOfHosts"></param>
+        /// <param name="numberOfHosts">Number of hosts</param>
+        /// <param name="subnetMask">Subnet mask</param>
         /// <returns></returns>
-        private int GetFreeHostsNumber(int numberOfHosts)
+        private int GetFreeHostsNumber(int numberOfHosts, string subnetMask)
         {
-            return numberOfHosts switch
+            return subnetMask switch
             {
-                var x when x > 8388606 => 16777214 - numberOfHosts,
-                var x when x > 4194302 & x <= 8388606 => 16777214 - numberOfHosts,
-                var x when x > 2097150 & x <= 4194302 => 4194302 - numberOfHosts,
-                var x when x > 1048574 & x <= 2097150 => 2097150 - numberOfHosts,
-                var x when x > 524286 & x <= 1048574 => 1048574 - numberOfHosts,
-                var x when x > 262142 & x <= 524286 => 524286 - numberOfHosts,
-                var x when x > 131070 & x <= 262142 => 262142 - numberOfHosts,
-                var x when x > 65534 & x <= 131070 => 131070 - numberOfHosts,
-                var x when x > 32766 & x <= 65534 => 6534 - numberOfHosts,
-                var x when x > 16382 & x <= 32766 => 32766 - numberOfHosts,
-                var x when x > 8190 & x <= 16382 => 16382 - numberOfHosts,
-                var x when x > 4094 & x <= 8190 => 8190 - numberOfHosts,
-                var x when x > 2046 & x <= 4094 => 4094 - numberOfHosts,
-                var x when x > 1022 & x <= 2046 => 2046 - numberOfHosts,
-                var x when x > 510 & x <= 1022 => 1022 - numberOfHosts,
-                var x when x > 256 & x <= 510 => 510 - numberOfHosts,
-                var x when x > 126 & x <= 254 => 254 - numberOfHosts,
-                var x when x > 62 & x <= 126 => 126 - numberOfHosts,
-                var x when x > 30 & x <= 62 => 62 - numberOfHosts,
-                var x when x > 14 & x <= 30 => 30 - numberOfHosts,
-                var x when x > 6 & x <= 14 => 14 - numberOfHosts,
-                var x when x > 2 & x <= 6 => 6 - numberOfHosts,
-                var x when x >= 1 & x <= 2 => 2 - numberOfHosts,
-                _ => 0
+                var x when x == "255.0.0.0" => 16777214 - numberOfHosts,
+                var x when x == "255.128.0.0" => 16777214 - numberOfHosts,
+                var x when x == "255.192.0.0" => 4194302 - numberOfHosts,
+                var x when x == "255.224.0.0" => 2097150 - numberOfHosts,
+                var x when x == "255.240.0.0" => 1048574 - numberOfHosts,
+                var x when x == "255.248.0.0" => 524286 - numberOfHosts,
+                var x when x == "255.252.0.0" => 262142 - numberOfHosts,
+                var x when x == "255.254.0.0" => 131070 - numberOfHosts,
+                var x when x == "255.255.0.0" => 65534 - numberOfHosts,
+                var x when x == "255.255.128.0" => 32766 - numberOfHosts,
+                var x when x == "255.255.192.0" => 16382 - numberOfHosts,
+                var x when x == "255.255.224.0" => 8190 - numberOfHosts,
+                var x when x == "255.255.240.0" => 4094 - numberOfHosts,
+                var x when x == "255.255.248.0" => 2046 - numberOfHosts,
+                var x when x == "255.255.252.0" => 1022 - numberOfHosts,
+                var x when x == "255.255.254.0" => 510 - numberOfHosts,
+                var x when x == "255.255.255.0" => 254 - numberOfHosts,
+                var x when x == "255.255.255.128" => 126 - numberOfHosts,
+                var x when x == "255.255.255.192" => 62 - numberOfHosts,
+                var x when x == "255.255.255.224" => 30 - numberOfHosts,
+                var x when x == "255.255.255.240" => 14 - numberOfHosts,
+                var x when x == "255.255.255.248" => 6 - numberOfHosts,
+                var x when x == "255.255.255.252" => 2 - numberOfHosts,
+                _ => -1
             };
         }
 
@@ -122,7 +123,7 @@ namespace Application.Common.Services
         /// <summary>
         /// Gets base IP address based on provided IP address template.
         /// </summary>
-        /// <param name="ipTemplate"></param>
+        /// <param name="ipTemplate">IP address template</param>
         /// <returns></returns>
         private string GetBaseIpAddress(string ipTemplate)
         {
@@ -159,7 +160,7 @@ namespace Application.Common.Services
         /// <summary>
         /// Calculating next IP address based on provided IP.
         /// </summary>
-        /// <param name="ipBaseTemplate"></param>
+        /// <param name="ipBaseTemplate">Base IP address</param>
         /// <returns></returns>
         private string GetNextIpAddress(string ipBaseTemplate)
         {
@@ -175,8 +176,8 @@ namespace Application.Common.Services
         /// <summary>
         /// Get subnet address based on IP address and subnet mask.
         /// </summary>
-        /// <param name="ipAddress"></param>
-        /// <param name="subnetMask"></param>
+        /// <param name="ipAddress">IP addres</param>
+        /// <param name="subnetMask">Subnet mask</param>
         /// <returns></returns>
         private string GetSubnetAddress(string ipAddress, string subnetMask)
         {
@@ -193,8 +194,8 @@ namespace Application.Common.Services
         /// <summary>
         /// Get subnet broadcast address based on subnet mask and subnet address.
         /// </summary>
-        /// <param name="subnetMask"></param>
-        /// <param name="subnetAddress"></param>
+        /// <param name="subnetMask">Subnet mask</param>
+        /// <param name="subnetAddress">Subnet address</param>
         /// <returns></returns>
         private string GetSubnetBroadcastAddress(string subnetMask, string subnetAddress)
         {
@@ -212,7 +213,7 @@ namespace Application.Common.Services
         /// <summary>
         /// Generates random network configs in the number defined in parameters.
         /// </summary>
-        /// <param name="numberOfConfigs"></param>
+        /// <param name="numberOfConfigs">Number of network configs</param>
         /// <returns></returns>
         public IEnumerable<NetworkConfig> GenerateNetworkConfigs(int numberOfConfigs)
         {
@@ -221,7 +222,7 @@ namespace Application.Common.Services
             var subnetMask = GetSubnetMask(numberOfConfigs);
             var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
             var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
-            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs);
+            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs, subnetMask);
 
             for (int i = 0; i < numberOfConfigs; i++)
             {
@@ -244,8 +245,8 @@ namespace Application.Common.Services
         /// <summary>
         /// Generates random network configs with IP of based template and in the number defined in parameters.
         /// </summary>
-        /// <param name="numberOfConfigs"></param>
-        /// <param name="ipTemplate"></param>
+        /// <param name="numberOfConfigs">Number of network configs</param>
+        /// <param name="ipTemplate">IP address template</param>
         /// <returns></returns>
         public IEnumerable<NetworkConfig> GenerateNetworkConfigsByIpTemplate(int numberOfConfigs, string ipTemplate)
         {
@@ -254,7 +255,7 @@ namespace Application.Common.Services
             var subnetMask = GetSubnetMask(numberOfConfigs);
             var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
             var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
-            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs);
+            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs, subnetMask);
 
             for (int i = 0; i < numberOfConfigs; i++)
             {
@@ -274,9 +275,79 @@ namespace Application.Common.Services
             return networkConfigList;
         }
 
+        /// <summary>
+        /// /// Generates random network configs with subnet mask and in the number defined in parameters.
+        /// </summary>
+        /// <param name="numberOfConfigs">Number of network configs</param>
+        /// <param name="subnetMask">Subnet mask</param>
+        /// <returns></returns>
         public IEnumerable<NetworkConfig> GenerateNetworkConfigsByMask(int numberOfConfigs, string subnetMask)
         {
-            throw new System.NotImplementedException();
+            if (GetFreeHostsNumber(0, subnetMask) < numberOfConfigs)
+            {
+                subnetMask = GetSubnetMask(numberOfConfigs);
+            }
+
+            var networkConfigList = new List<NetworkConfig>();
+            var ipAddressBase = GetBaseIpAddress(null);
+            var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
+            var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs, subnetMask);
+
+            for (int i = 0; i < numberOfConfigs; i++)
+            {
+                var ipBaseTemplate = i == 0 ? subnetAddress : networkConfigList.Last().ipHostAddress;
+                var ipAddress = GetNextIpAddress(ipBaseTemplate);
+                var config = new NetworkConfig()
+                {
+                    ipHostAddress = ipAddress,
+                    subnetMask = subnetMask,
+                    subnetAddress = subnetAddress,
+                    subnetBroadcastAddress = subnetBroadcastAddress,
+                    freeHostsNumberInSubnet = freeHostsNumber
+                };
+
+                networkConfigList.Add(config);
+            }
+            return networkConfigList;
+        }
+
+        /// <summary>
+        /// /// Generates random network configs with IP of based template, subnet mask and in the number defined in parameters.
+        /// </summary>
+        /// <param name="numberOfConfigs">Number of network configs</param>
+        /// <param name="ipTemplate">IP address template</param>
+        /// <param name="subnetMask">Subnet mask</param>
+        /// <returns></returns>
+        public IEnumerable<NetworkConfig> GenerateNetworkConfigsByIpAndMaskTemplate(int numberOfConfigs, string ipTemplate, string subnetMask)
+        {
+            if (GetFreeHostsNumber(0, subnetMask) < numberOfConfigs)
+            {
+                subnetMask = GetSubnetMask(numberOfConfigs);
+            }
+
+            var networkConfigList = new List<NetworkConfig>();
+            var ipAddressBase = GetBaseIpAddress(ipTemplate);
+            var subnetAddress = GetSubnetAddress(ipAddressBase, subnetMask);
+            var subnetBroadcastAddress = GetSubnetBroadcastAddress(subnetMask, subnetAddress);
+            var freeHostsNumber = GetFreeHostsNumber(numberOfConfigs, subnetMask);
+
+            for (int i = 0; i < numberOfConfigs; i++)
+            {
+                var ipBaseTemplate = i == 0 ? subnetAddress : networkConfigList.Last().ipHostAddress;
+                var ipAddress = GetNextIpAddress(ipBaseTemplate);
+                var config = new NetworkConfig()
+                {
+                    ipHostAddress = ipAddress,
+                    subnetMask = subnetMask,
+                    subnetAddress = subnetAddress,
+                    subnetBroadcastAddress = subnetBroadcastAddress,
+                    freeHostsNumberInSubnet = freeHostsNumber
+                };
+
+                networkConfigList.Add(config);
+            }
+            return networkConfigList;
         }
     }
 }
