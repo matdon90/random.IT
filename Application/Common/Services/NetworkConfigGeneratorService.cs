@@ -28,10 +28,7 @@ namespace Application.Common.Services
         /// <returns></returns>
         private bool IsNumeric(string stringToCheck)
         {
-            int retNum;
-
-            bool isNum = int.TryParse(stringToCheck, System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out retNum);
-            return isNum;
+            return int.TryParse(stringToCheck, System.Globalization.NumberStyles.Any, System.Globalization.NumberFormatInfo.InvariantInfo, out int retNum);
         }
 
         /// <summary>
@@ -128,8 +125,7 @@ namespace Application.Common.Services
         private string GetBaseIpAddress(string ipTemplate)
         {
             var ipOctetTable = new string[4];
-            string ipAddress = string.Empty;
-
+            string ipAddress;
             if (ipTemplate == null)
             {
                 for (int i = 0; i < ipOctetTable.Length; i++)
