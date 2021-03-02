@@ -13,7 +13,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <param name="networkConfigsNumber">Number of network configs</param>
         /// <param name="filter">Pagination filter</param>
-        /// <param name="ipTemplate" ex>IP address template</param>
+        /// <param name="ipTemplate">IP address template</param>
         /// <param name="subnetMask">Subnet mask</param>
         /// <returns>List of random network configs</returns>
         [HttpGet("{networkConfigsNumber}")]

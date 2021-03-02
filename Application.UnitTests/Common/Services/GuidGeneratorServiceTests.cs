@@ -1,6 +1,5 @@
 ﻿using Application.Common.Services;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -11,9 +10,8 @@ namespace Application.UnitTests.Common.Services
     [TestFixture]
     public class GuidGeneratorServiceTests
     {
-
-        GuidGeneratorService service;
-        DateTime date = new DateTime(2020, 08, 18, 8, 53, 00);
+        private GuidGeneratorService service;
+        readonly DateTime date = new DateTime(2020, 08, 18, 8, 53, 00);
 
         [SetUp]
         public void SetUp()
