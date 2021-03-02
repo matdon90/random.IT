@@ -43,7 +43,7 @@ random.IT is system focused on sharing random or pseudo-random data via API. The
 ### Used Technologies
 
 Backend
-* [ASP.NET Core 3.1](https://docs.microsoft.com/pl-pl/aspnet/core/?view=aspnetcore-3.1)
+* [ASP.NET Core 5.0](https://docs.microsoft.com/pl-pl/aspnet/core/?view=aspnetcore-5.0)
 * [MediatR](https://github.com/jbogard/MediatR)
 * [AutoMapper](https://automapper.org/)
 * [AutoWrapper](https://github.com/proudmonkey/AutoWrapper)
