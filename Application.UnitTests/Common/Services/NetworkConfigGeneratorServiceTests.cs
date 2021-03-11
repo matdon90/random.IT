@@ -11,12 +11,12 @@ namespace Application.UnitTests.Common.Services
     [TestFixture]
     public class NetworkConfigGeneratorServiceTests
     {
-        private NetworkConfigGeneratorService service;
+        private NetworkConfigGeneratorService _service;
 
         [SetUp]
         public void SetUp()
         {
-            service = new NetworkConfigGeneratorService();
+            _service = new NetworkConfigGeneratorService();
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace Application.UnitTests.Common.Services
 
 
             //act
-            var result = service.GenerateNetworkConfigs(1);
+            var result = _service.GenerateNetworkConfigs(1);
 
             //assert
             result.ToList().First().Should().BeOfType<NetworkConfig>();
@@ -39,7 +39,7 @@ namespace Application.UnitTests.Common.Services
             int numberOfConfigs = 40;
 
             //act
-            var result = service.GenerateNetworkConfigs(numberOfConfigs);
+            var result = _service.GenerateNetworkConfigs(numberOfConfigs);
 
             //assert
             result.Should().HaveCount(numberOfConfigs);
