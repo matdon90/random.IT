@@ -69,7 +69,7 @@ To get a local copy up and running follow these simple steps:
 <!-- API DOCUMENTATION -->
 ## API Documentation
 
-The API currently contains 1 endpoint: Guid.
+The API currently contains 2 endpoints: Guid and Network Configurations.
 When new endpoints are created, they will be successively added to the documentation.
 
 ### GUID
@@ -170,6 +170,104 @@ Example response for `/api/guid/120?PageNumber=3&PageSize=15&isUppercase=true`:
     "lastPage": "https://localhost:44386/api/guid/120?pageNumber=8&pageSize=15",
     "nextPage": "https://localhost:44386/api/guid/120?pageNumber=4&pageSize=15",
     "previousPage": "https://localhost:44386/api/guid/120?pageNumber=2&pageSize=15"
+  }
+}
+```
+
+### NETWORK CONFIGURATIONS
+
+| Command    | Method | Route                   | Description                                             |
+|------------|--------|-------------------------|---------------------------------------------------------|
+| ListNetworkConfigsWithIpTemplate   | GET    | /api/networkconfig/{networkConfigsNumber} | Return list with number of random network configs declared in parameter. Can be parametrized with use of IP address template or/and subnet mask. |
+
+API command ListNetworkConfigsWithIpTemplate allows user to retrieve list of network configs that contains:
+* host IP V4 address,
+* subnet mask,
+* subnet address,
+* subnet broadcast address,
+* number of still free hosts in subnet
+
+Response is paginated:
+* its default page size is 10 and cannot be higher than 30
+* default page number is 1 and cannot be lower than 1
+These can be changed in request.
+
+User can parametrize request:
+* PageNumber (default: 1) - will returns chosen page number, i.e. `/api/networkconfig/50?PageNumber=2`
+* PageSize (default: 10) - will set size of page of response, i.e. `/api/networkconfig/50?PageSize=4`
+* ipTemplate (optional) - will return list of network confis with ip based on provided template, i.e. `/api/networkconfig/8?ipTemplate=192.168.x.x`
+* subnetMask (optional) - will return list of network confis with provided subnet mask, i.e. `/api/networkconfig/8?subnetMask=255.255.255.0`
+
+Response data will be in the following format:
+```
+{
+  "statusCode": <int>,
+  "message": <string>,
+  "result": [
+    {
+      "ipHostAddress": <string>,
+      "subnetMask": <string>,
+      "subnetAddress": <string>,
+      "subnetBroadcastAddress": <string>,
+      "freeHostsNumberInSubnet": <int>
+    }
+    ...
+    {
+      "ipHostAddress": <string>,
+      "subnetMask": <string>,
+      "subnetAddress": <string>,
+      "subnetBroadcastAddress": <string>,
+      "freeHostsNumberInSubnet": <int>
+    }
+  ],
+  "pagination": {
+    "pageNumber": <int>,
+    "pageSize": <int>,
+    "totalPages": <int>,
+    "totalRecords": <int>,
+    "firstPage": <string>,
+    "lastPage": <string>,
+    "nextPage": <string>,
+    "previousPage": <string>
+  }
+}
+```
+
+Example response for `/api/networkconfig/3?ipTemplate=192.168.x.x&subnetMask=255.255.255.0`:
+```json
+{
+  "statusCode": 200,
+  "message": "GET Request successful.",
+  "result": [
+    {
+      "ipHostAddress": "192.168.51.1",
+      "subnetMask": "255.255.255.0",
+      "subnetAddress": "192.168.51.0",
+      "subnetBroadcastAddress": "192.168.51.15",
+      "freeHostsNumberInSubnet": 251
+    },
+    {
+      "ipHostAddress": "192.168.51.2",
+      "subnetMask": "255.255.255.0",
+      "subnetAddress": "192.168.51.0",
+      "subnetBroadcastAddress": "192.168.51.15",
+      "freeHostsNumberInSubnet": 251
+    },
+    {
+      "ipHostAddress": "192.168.51.3",
+      "subnetMask": "255.255.255.0",
+      "subnetAddress": "192.168.51.0",
+      "subnetBroadcastAddress": "192.168.51.15",
+      "freeHostsNumberInSubnet": 251
+    }
+  ],
+  "pagination": {
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalPages": 1,
+    "totalRecords": 3,
+    "firstPage": "https://localhost:44386/api/networkconfig/3?pageNumber=1&pageSize=10",
+    "lastPage": "https://localhost:44386/api/networkconfig/3?pageNumber=1&pageSize=10"
   }
 }
 ```
